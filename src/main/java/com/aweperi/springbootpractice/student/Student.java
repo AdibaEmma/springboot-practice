@@ -1,9 +1,6 @@
 package com.aweperi.springbootpractice.student;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -14,6 +11,10 @@ public class Student {
             name = "student_sequence",
             sequenceName = "student_sequence",
             allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "student_sequence"
     )
     private Long id;
     private String name;
