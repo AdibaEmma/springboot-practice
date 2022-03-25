@@ -11,11 +11,14 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/v1/students/")
 public class StudentController {
+    private final IstudentService istudentService;
+
+    public StudentController(IstudentService istudentService) {
+        this.istudentService = istudentService;
+    }
+
     @GetMapping
     public List<Student> fetchStudents() {
-        return List.of(
-                new Student(1L,"Emmanuel", "eabaagah@gmail.com",
-                        LocalDate.of(1990, Month.AUGUST, 15), 32)
-        );
+        return istudentService.fetchStudents();
     }
 }
