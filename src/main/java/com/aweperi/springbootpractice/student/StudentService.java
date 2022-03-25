@@ -18,9 +18,6 @@ public class StudentService implements IstudentService{
 
     @Override
     public List<Student> fetchStudents() {
-        return List.of(
-                new Student(1L,"Emmanuel", "eabaagah@gmail.com",
-                        LocalDate.of(1990, Month.AUGUST, 15), 32)
-        );
+        return studentRepository.findAll();
     }
 }
