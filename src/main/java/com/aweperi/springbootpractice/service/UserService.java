@@ -2,6 +2,7 @@ package com.aweperi.springbootpractice.service;
 
 import com.aweperi.springbootpractice.exceptions.DuplicateEmailException;
 import com.aweperi.springbootpractice.exceptions.UserRegistrationException;
+import com.aweperi.springbootpractice.model.ConfirmationToken;
 import com.aweperi.springbootpractice.model.User;
 import com.aweperi.springbootpractice.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -11,13 +12,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
     private static final String USER_NOT_FOUND_MSG = "user with email %s not found";
+    private BCryptPasswordEncoder bcryptPasswordEncoder;
 
     private final UserRepository userRepository;
-    private BCryptPasswordEncoder bcryptPasswordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
+
 
 
     @Override
@@ -38,6 +44,18 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
 
 //        Todo: send confirmation token
-        return "saved";
+        String token = UUID.randomUUID().toString();
+        var confirmationToken = new ConfirmationToken(
+            token,
+            LocalDateTime.now(),
+            LocalDateTime.now().plusMinutes(15),
+            user
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        // TODO: Send Email
+
+        return token;
     }
 }

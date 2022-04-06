@@ -1,6 +1,5 @@
-package com.aweperi.springbootpractice.service.token;
+package com.aweperi.springbootpractice.model;
 
-import com.aweperi.springbootpractice.model.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +10,8 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
+@Entity()
+@Table(name = "confirmation_tokens")
 public class ConfirmationToken {
     @Id
     @SequenceGenerator(name = "confirmation_token_sequence", sequenceName = "confirmation_token_sequence", allocationSize = 1)
@@ -36,11 +37,10 @@ public class ConfirmationToken {
     )
     private User user;
 
-    public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiresAt, LocalDateTime confirmedAt, User user) {
+    public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiresAt, User user) {
         this.token = token;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
-        this.confirmedAt = confirmedAt;
         this.user = user;
     }
 }
