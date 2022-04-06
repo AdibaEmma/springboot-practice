@@ -1,5 +1,6 @@
-package com.aweperi.springbootpractice.user;
+package com.aweperi.springbootpractice.repository;
 
+import com.aweperi.springbootpractice.model.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

@@ -1,5 +1,6 @@
-package com.aweperi.springbootpractice.user;
+package com.aweperi.springbootpractice.model;
 
+import com.aweperi.springbootpractice.model.UserRole;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

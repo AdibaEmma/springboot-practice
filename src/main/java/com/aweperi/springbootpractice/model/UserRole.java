@@ -1,4 +1,4 @@
-package com.aweperi.springbootpractice.user;
+package com.aweperi.springbootpractice.model;
 
 public enum UserRole {
     USER,

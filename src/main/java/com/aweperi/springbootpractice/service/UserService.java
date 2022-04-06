@@ -1,5 +1,6 @@
-package com.aweperi.springbootpractice.user;
+package com.aweperi.springbootpractice.service;
 
+import com.aweperi.springbootpractice.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
