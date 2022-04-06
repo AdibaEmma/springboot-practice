@@ -6,6 +6,8 @@ import com.aweperi.springbootpractice.model.ConfirmationToken;
 import com.aweperi.springbootpractice.model.User;
 import com.aweperi.springbootpractice.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

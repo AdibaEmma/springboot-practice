@@ -9,6 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("api/v1/registration")
 @AllArgsConstructor
@@ -17,9 +23,17 @@ public class UserRegistrationController {
     private final UserRegistrationService registrationService;
 
     @PostMapping("")
-    public String register(@RequestBody UserRegistrationRequest request) {
+    public ResponseEntity register(@RequestBody UserRegistrationRequest request) {
         try {
-            return registrationService.register(request);
+            Map<String, Object> responseBody = new LinkedHashMap<>();
+            responseBody.put("timestamp", String.valueOf(LocalDateTime.now()));
+            responseBody.put("status", HttpServletResponse.SC_CREATED);
+            responseBody.put("message", "success");
+            responseBody.put("payload", registrationService.register(request));
+
+            return ResponseEntity.status(HttpStatus.CREATED)
+
+                    .body(responseBody);
         } catch (UserRegistrationException ex) {
             var cause = ex.getCause();
             log.error(cause.getMessage());

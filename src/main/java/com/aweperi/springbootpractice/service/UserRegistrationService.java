@@ -6,6 +6,7 @@ import com.aweperi.springbootpractice.exceptions.UserRegistrationException;
 import com.aweperi.springbootpractice.model.User;
 import com.aweperi.springbootpractice.model.UserRole;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
