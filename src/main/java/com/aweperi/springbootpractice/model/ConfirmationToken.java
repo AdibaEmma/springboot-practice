@@ -26,7 +26,6 @@ public class ConfirmationToken {
 
     @NotNull
     private LocalDateTime createdAt;
-
     private LocalDateTime expiresAt;
     private LocalDateTime confirmedAt;
 

@@ -26,10 +26,9 @@ public class UserRegistrationController {
     public ResponseEntity register(@RequestBody UserRegistrationRequest request) {
         try {
             Map<String, Object> responseBody = new LinkedHashMap<>();
-            responseBody.put("timestamp", String.valueOf(LocalDateTime.now()));
             responseBody.put("status", HttpServletResponse.SC_CREATED);
             responseBody.put("message", "success");
-            responseBody.put("payload", registrationService.register(request));
+            responseBody.put("body", registrationService.register(request));
 
             return ResponseEntity.status(HttpStatus.CREATED)
 

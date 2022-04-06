@@ -1,7 +1,6 @@
 package com.aweperi.springbootpractice.service;
 
-import com.aweperi.springbootpractice.exceptions.DuplicateEmailException;
-import com.aweperi.springbootpractice.exceptions.UserRegistrationException;
+import com.aweperi.springbootpractice.exceptions.*;
 import com.aweperi.springbootpractice.model.ConfirmationToken;
 import com.aweperi.springbootpractice.model.User;
 import com.aweperi.springbootpractice.repository.UserRepository;
@@ -15,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,8 +25,6 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final ConfirmationTokenService confirmationTokenService;
-
-
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -59,5 +57,13 @@ public class UserService implements UserDetailsService {
         // TODO: Send Email
 
         return token;
+    }
+
+    public void enableUser(String email) {
+        var user = userRepository.findByEmail(email);
+        if(user.isEmpty()) throw new UserAccountException(new UserNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+        var existingUser = user.get();
+        existingUser.setEnabled(true);
+        userRepository.save(existingUser);
     }
 }
