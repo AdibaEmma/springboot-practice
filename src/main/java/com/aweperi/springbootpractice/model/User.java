@@ -21,13 +21,14 @@ public class User implements UserDetails {
     @Column(name = "user_id", nullable = false)
     private Long user_id;
     
-    @Column(name = "name")
+    @Column(name = "first_name")
     @NotNull
-    private String name;
-    
-    @Column(name = "username")
-    private String username;
-    
+    private String first_name;
+
+    @Column(name = "last_name")
+    @NotNull
+    private String last_name;
+
     @Column(name = "email")
     @NotNull
     private String email;
@@ -40,19 +41,17 @@ public class User implements UserDetails {
     private UserRole userRole;
     
     @Column(name = "locked")
-    private Boolean locked;
+    private Boolean locked = false;
     
     @Column(name = "enabled")
-    private Boolean enabled;
+    private Boolean enabled = false;
 
-    public User(String name, String username, String email, String password, UserRole userRole, Boolean locked, Boolean enabled) {
-        this.name = name;
-        this.username = username;
+    public User(String first_name, String last_name, String email, String password, UserRole userRole) {
+        this.first_name = first_name;
+        this.last_name = last_name;
         this.email = email;
         this.password = password;
         this.userRole = userRole;
-        this.locked = locked;
-        this.enabled = enabled;
     }
 
     @Override
@@ -68,7 +67,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
