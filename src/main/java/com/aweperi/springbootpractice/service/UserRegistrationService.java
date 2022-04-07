@@ -35,7 +35,7 @@ public class UserRegistrationService {
                 )
         );
 
-        var link = "http://localhost:5000/api/v1/registration/confirm?token=" + token;
+        var link = "http://localhost:5000/api/v1/signup/confirm?token=" + token;
         var name = String.format("%s %s", request.getFirstName(), request.getLastName());
         emailSender.send(
                 request.getEmail(),
@@ -46,7 +46,7 @@ public class UserRegistrationService {
     }
 
     @Transactional
-    public String confirmToken(String token) {
+    public User confirmToken(String token) {
         var confirmationToken = confirmationTokenService.getToken(token)
                 .orElseThrow(() -> new UserAccountException(new InvalidTokenException()));
 
@@ -56,8 +56,9 @@ public class UserRegistrationService {
         if(expiredAt.isBefore(LocalDateTime.now())) throw new UserAccountException(new TokenConfirmationException("token has expired"));
 
         confirmationTokenService.setConfirmedAt(token);
-        userService.enableUser(confirmationToken.getUser().getEmail());
-        return "confirmed";
+        var user = confirmationToken.getUser();
+        userService.enableUser(user.getEmail());
+        return user;
     }
 
     private String buildEmail(String name, String link) {
