@@ -1,6 +1,7 @@
 package com.aweperi.springbootpractice.service;
 
 import com.aweperi.springbootpractice.controller.UserRegistrationRequest;
+import com.aweperi.springbootpractice.email.EmailSender;
 import com.aweperi.springbootpractice.exceptions.*;
 import com.aweperi.springbootpractice.model.ConfirmationToken;
 import com.aweperi.springbootpractice.model.User;
@@ -18,12 +19,13 @@ public class UserRegistrationService {
     private final EmailValidator emailValidator;
     private final UserService userService;
     private final ConfirmationTokenService confirmationTokenService;
+    private final EmailSender emailSender;
 
     public String register(UserRegistrationRequest request) {
         var isValidEmail = emailValidator.test(request.getEmail());
 
         if(!isValidEmail) throw new UserRegistrationException( new InvalidEmailException());
-        return userService.signUpUser(
+        var token = userService.signUpUser(
                 new User(
                         request.getFirstName(),
                         request.getLastName(),
@@ -32,6 +34,15 @@ public class UserRegistrationService {
                         UserRole.USER
                 )
         );
+
+        var link = "http://localhost:5000/api/v1/registration/confirm?token=" + token;
+        var name = String.format("%s %s", request.getFirstName(), request.getLastName());
+        emailSender.send(
+                request.getEmail(),
+                buildEmail(name, link)
+        );
+
+        return token;
     }
 
     @Transactional
