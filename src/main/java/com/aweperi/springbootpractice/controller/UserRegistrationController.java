@@ -84,6 +84,5 @@ public class UserRegistrationController {
             log.error(cause.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, cause.getMessage(),ex);
         }
-
     }
 }
