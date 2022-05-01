@@ -5,6 +5,8 @@ import com.aweperi.springbootpractice.model.ConfirmationToken;
 import com.aweperi.springbootpractice.model.User;
 import com.aweperi.springbootpractice.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,19 +14,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class UserService implements UserDetailsService {
-    private static final String USER_NOT_FOUND_MSG = "user with email %s not found";
-    private BCryptPasswordEncoder bcryptPasswordEncoder;
-
+    private final BCryptPasswordEncoder bcryptPasswordEncoder;
     private final UserRepository userRepository;
     private final ConfirmationTokenService confirmationTokenService;
+    private static final String USER_NOT_FOUND_MSG = "user with email %s not found";
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

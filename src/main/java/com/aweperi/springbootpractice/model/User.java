@@ -28,39 +28,27 @@ public class User implements UserDetails {
     private String first_name;
 
     @Column(name = "last_name")
-    @NotNull
     @NotBlank
     private String last_name;
-
     @Column(name = "email")
-    @NotNull
     @NotBlank
     private String email;
-    
-    @Column(name = "passoword")
     private String password;
-    
-    @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
-    
-    @Column(name = "locked")
+    private UserRole role;
     private Boolean locked = false;
-    
-    @Column(name = "enabled")
     private Boolean enabled = false;
 
-    public User(String first_name, String last_name, String email, String password, UserRole userRole) {
+    public User(String first_name, String last_name, String email, String password) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;
         this.password = password;
-        this.userRole = userRole;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        var authority = new SimpleGrantedAuthority(userRole.name());
+        var authority = new SimpleGrantedAuthority(role.name());
         return Collections.singletonList(authority);
     }
 

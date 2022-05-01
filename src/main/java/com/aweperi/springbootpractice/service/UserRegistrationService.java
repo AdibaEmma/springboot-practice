@@ -4,7 +4,6 @@ import com.aweperi.springbootpractice.controller.UserRegistrationRequest;
 import com.aweperi.springbootpractice.email.EmailSender;
 import com.aweperi.springbootpractice.exceptions.*;
 import com.aweperi.springbootpractice.model.User;
-import com.aweperi.springbootpractice.model.UserRole;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +27,7 @@ public class UserRegistrationService {
                         request.getFirstName(),
                         request.getLastName(),
                         request.getEmail(),
-                        request.getPassword(),
-                        UserRole.USER
+                        request.getPassword()
                 )
         );
 

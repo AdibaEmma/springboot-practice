@@ -16,7 +16,7 @@ class UserTest {
 
     @Test
 public void userModelTest() {
-        var user = new User("", "", "eabaagah@gmial.com", "", UserRole.USER);
+        var user = new User("", "", "eabaagah@gmial.com", "");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
 
