@@ -1,14 +1,15 @@
 package com.aweperi.springbootpractice.service;
 
-import com.aweperi.springbootpractice.exceptions.*;
+import com.aweperi.springbootpractice.exceptions.DuplicateEmailException;
+import com.aweperi.springbootpractice.exceptions.UserAccountException;
+import com.aweperi.springbootpractice.exceptions.UserNotFoundException;
+import com.aweperi.springbootpractice.exceptions.UserRegistrationException;
 import com.aweperi.springbootpractice.model.ConfirmationToken;
 import com.aweperi.springbootpractice.model.User;
+import com.aweperi.springbootpractice.model.UserRole;
 import com.aweperi.springbootpractice.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -44,6 +44,7 @@ public class UserService implements UserDetailsService {
         var encodedPassword = bcryptPasswordEncoder.encode(user.getPassword());
 
         user.setPassword(encodedPassword);
+        user.setRole(UserRole.USER);
 
         userRepository.save(user);
 

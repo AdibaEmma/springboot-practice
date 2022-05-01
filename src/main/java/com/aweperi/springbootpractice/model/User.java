@@ -11,14 +11,15 @@ import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 
+import static javax.persistence.GenerationType.AUTO;
+
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
-    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+    @GeneratedValue(strategy = AUTO)
     @Column(name = "user_id", nullable = false)
     private Long user_id;
     

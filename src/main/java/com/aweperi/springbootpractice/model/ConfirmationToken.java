@@ -8,14 +8,15 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Data
 @NoArgsConstructor
 @Entity()
 @Table(name = "confirmation_tokens")
 public class ConfirmationToken {
     @Id
-    @SequenceGenerator(name = "confirmation_token_sequence", sequenceName = "confirmation_token_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "confirmation_token_sequence")
+    @GeneratedValue(strategy = IDENTITY)
     
     @Column(name = "token_id")
     private Long tokenId;
