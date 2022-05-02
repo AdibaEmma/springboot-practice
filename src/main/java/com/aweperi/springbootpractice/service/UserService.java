@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
 
         var userRole = userRoleRepository.findRoleByName("USER").orElseThrow(RoleNotFoundException::new);
         user.setPassword(encodedPassword);
-        user.addRoleToUser(null, userRole);
+        user.addRoleToUser(userRole);
 
         userRepository.save(user);
 

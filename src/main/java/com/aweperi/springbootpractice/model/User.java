@@ -52,7 +52,7 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public void addRoleToUser(@Nullable String username, Role role) {
+    public void addRoleToUser(Role role) {
         this.getRoles().add(role);
     }
 
