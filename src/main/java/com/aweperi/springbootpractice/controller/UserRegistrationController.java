@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedHashMap;
@@ -71,16 +70,15 @@ public class UserRegistrationController {
             )
     })
     @GetMapping("confirm")
-    public RedirectView confirm(@RequestParam("token") String token) {
+    public ResponseEntity<LinkedHashMap<String, Object>> confirm(@RequestParam("token") String token) {
         try {
             responseBody.put(ResponseKeys.STATUS.toString(), HttpServletResponse.SC_ACCEPTED);
             responseBody.put(ResponseKeys.MESSAGE.toString(), SUCCESS_MSG);
             responseBody.put(ResponseKeys.PAYLOAD.toString(), registrationService.confirmToken(token));
 
             log.info(String.valueOf(responseBody));
-            RedirectView redirectView = new RedirectView();
-            redirectView.setUrl("/api/v1/users");
-            return redirectView;
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(responseBody);
         } catch(UserAccountException ex) {
             var cause = ex.getCause();
             log.error(cause.getMessage());

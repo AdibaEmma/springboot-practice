@@ -16,8 +16,12 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     @GetMapping("")
-    public List<User> message() {
+    public List<User> getUsers() {
         return userService.fetchUsers();
+    }
+    @GetMapping("/confirmed")
+    public String message() {
+        return "You are now confirmed";
     }
     @GetMapping("/{id}")
     public User getUser(@PathVariable Long id) {
