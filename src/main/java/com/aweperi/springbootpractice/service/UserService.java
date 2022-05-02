@@ -1,15 +1,13 @@
 package com.aweperi.springbootpractice.service;
 
-import com.aweperi.springbootpractice.exceptions.DuplicateEmailException;
-import com.aweperi.springbootpractice.exceptions.UserAccountException;
-import com.aweperi.springbootpractice.exceptions.UserNotFoundException;
-import com.aweperi.springbootpractice.exceptions.UserRegistrationException;
+import com.aweperi.springbootpractice.exceptions.*;
 import com.aweperi.springbootpractice.model.ConfirmationToken;
 import com.aweperi.springbootpractice.model.User;
-import com.aweperi.springbootpractice.model.UserRole;
 import com.aweperi.springbootpractice.repository.UserRepository;
+import com.aweperi.springbootpractice.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,6 +26,7 @@ import java.util.UUID;
 public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder bcryptPasswordEncoder;
     private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
     private final ConfirmationTokenService confirmationTokenService;
     private static final String USER_NOT_FOUND_MSG = "user with email %s not found";
 
@@ -43,8 +43,9 @@ public class UserService implements UserDetailsService {
 
         var encodedPassword = bcryptPasswordEncoder.encode(user.getPassword());
 
+        var userRole = userRoleRepository.findRoleByName("USER").orElseThrow(RoleNotFoundException::new);
         user.setPassword(encodedPassword);
-        user.setRole(UserRole.USER);
+        user.addRoleToUser(null, userRole);
 
         userRepository.save(user);
 
@@ -70,5 +71,13 @@ public class UserService implements UserDetailsService {
         var existingUser = user.get();
         existingUser.setEnabled(true);
         userRepository.save(existingUser);
+    }
+
+    public List<User> fetchUsers() {
+        return userRepository.findAll();
+    }
+
+    public User getUser(Long id) {
+            return userRepository.findById(id).orElseThrow(() -> new UserAccountException(new UserNotFoundException()));
     }
 }

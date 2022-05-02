@@ -1,6 +1,9 @@
 package com.aweperi.springbootpractice.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,37 +11,39 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
-import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = AUTO)
-    @Column(name = "user_id", nullable = false)
-    private Long user_id;
-    
-    @Column(name = "first_name")
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(nullable = false)
+    private Long userId;
     @NotNull
     @NotBlank
     private String first_name;
-
-    @Column(name = "last_name")
     @NotBlank
     private String last_name;
-    @Column(name = "email")
     @NotBlank
     private String email;
     private String password;
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
     private Boolean locked = false;
     private Boolean enabled = false;
+
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
+    private Collection<Role> roles = new ArrayList<>();
 
     public User(String first_name, String last_name, String email, String password) {
         this.first_name = first_name;
@@ -47,11 +52,17 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public void addRoleToUser(@Nullable String username, Role role) {
+        this.getRoles().add(role);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        var authority = new SimpleGrantedAuthority(role.name());
-        return Collections.singletonList(authority);
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        this.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        return authorities;
     }
+
 
     @Override
     public String getPassword() {
