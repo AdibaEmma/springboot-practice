@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -27,10 +29,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+        customAuthenticationFilter.setFilterProcessesUrl("/api/v1/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().anyRequest().permitAll();
-        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
+        http.authorizeRequests().antMatchers("/swagger-ui.html");
+        http.authorizeRequests().antMatchers(POST, "/api/v*/signup/**").permitAll();
+        http.authorizeRequests().antMatchers(GET, "/api/v1/signup/**").permitAll();
+        http.authorizeRequests().antMatchers(POST, "/api/v*/login/**").permitAll();
+        http.authorizeRequests().antMatchers(GET, "/api/v*/users/**").hasAuthority("USER");
+        http.authorizeRequests().antMatchers(GET, "/api/v*/admins/**").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(POST, "/api/v*/admins/**").hasAuthority("ADMIN");
+        http.authorizeRequests().anyRequest().authenticated();
+        http.addFilter(customAuthenticationFilter);
     }
 
     @Override
