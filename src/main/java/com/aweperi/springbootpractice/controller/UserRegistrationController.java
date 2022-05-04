@@ -40,7 +40,6 @@ public class UserRegistrationController {
                     description = "Internal server error",
                     content = {@Content(mediaType = "application/json")}
             )
-
     })
     @PostMapping("")
     public ResponseEntity<LinkedHashMap<String, Object>> register(@RequestBody UserRegistrationRequest request) {

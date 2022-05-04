@@ -27,8 +27,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
-    @Value("${jwt.secret}")
-    String jwt_secret = "";
+
+    @Value("${jwt_secret}")
+    private String jwt_secret;
 
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {

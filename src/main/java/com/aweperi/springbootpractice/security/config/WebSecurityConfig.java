@@ -37,10 +37,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers("/swagger-ui.html");
-        http.authorizeRequests().antMatchers(POST, "/api/v*/signup/**").permitAll();
         http.authorizeRequests().antMatchers(GET, "/api/v*/signup/**").permitAll();
-        http.authorizeRequests().antMatchers(POST, "/api/v*/login/**").permitAll();
+        http.authorizeRequests().antMatchers(POST, "/api/v*/signup/**").permitAll();
+        http.authorizeRequests().antMatchers(GET, "/api/v*/login").permitAll();
+        http.authorizeRequests().antMatchers(POST, "/api/v*/login").permitAll();
         http.authorizeRequests().antMatchers(GET, "/api/v*/users/**").hasAnyAuthority("USER");
+        http.authorizeRequests().antMatchers(POST, "/api/v*/users/**").hasAnyAuthority("USER");
         http.authorizeRequests().antMatchers(GET, "/api/v*/admins/**").hasAuthority("ADMIN");
         http.authorizeRequests().antMatchers(POST, "/api/v*/admins/**").hasAuthority("ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
